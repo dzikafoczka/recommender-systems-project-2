@@ -13,6 +13,7 @@ Author: Paweł Łączkowski
 6. [Non-hybrid models (architectures)](#non_hybrid_models)
 7. [Hybrid models (architectures)](#hybrid_models)
 8. [Recommender tuning](#tuning)
+9. [Recommender evaluation](#evaluation)
 
 ## Project description <a name="project_description"></a>
 
@@ -214,7 +215,7 @@ This architecture works really well and in the end got the second best score amo
 
 **The best result (with additional manual tuning): 0.262729**
 
-## Tuning the recommender.  <a name="tuning"></a>
+## Tuning the recommender. <a name="tuning"></a>
 
 Recommender tuning involves properly training the machine learning models used to predict scores.
 
@@ -254,7 +255,7 @@ I tested various ranges and eventually chose the above one, as it gave the most 
 
 I tested various ranges and finally chose the same range as for `learning_rate` because it gave the most stable results.
 
-## Evaluation of the recommender.
+## Evaluation of the recommender. <a name="evaluation"></a>
 
 The final results are as follows (models whose results were unsatisfactory were omitted):
 
@@ -301,11 +302,13 @@ The final results are as follows (models whose results were unsatisfactory were 
 | CatBoostRegressorCBUIRecommender | 0.244060  |
 | AmazonRecommender                | 0.223693  |
 
-## Conclusion
+## Conclusion <a name="evaluation"></a>
 
-`User and Item Features #1` turned out to be much better than the `User and Item Features #2` and produced satisfying results on most models.
+As I mentioned above all architectures based on GMF+MLP worked really well. They obtained, on average, much better results than the other models. Hybrid models based on GML+MLP were especially good, and they gave me the highest results, above 0.26.
 
-The CatBoost model achieved the best score of 0.217583, beating amazon's recommender score by 0.032247 points.
+A great failure were models with many fully connected layers and a large number of neurons. They had trouble with learning anything, and when they did learn something, the results were much worse than those obtained by amazon's recomender.
+
+In the end, I managed to get a score of `0.265105`, which beat amazon's recomender by `0.041412` points.
 
 ## Project requirements
 
@@ -316,13 +319,13 @@ Requires:
 2. [Anaconda](https://www.anaconda.com/products/individual).
 3. [Git](https://git-scm.com/downloads)
 
-All the necessary dependencies can be found in the file `requirements.txt` or `environment.yml`.
+All the necessary dependencies can be found in the file `requirements.txt` and `environment.yml`.
 
 To run the project:
 1. Fork this repository.
 2. Clone your repository.
           <pre>git clone <i>your_repository_address</i></pre>
-3. Create conda environment.
+3. Create environment.
           <pre>conda env create --name <i>name_of_environment</i> -f environment.yml </pre>
 4. Activate your environment.
           <pre>conda activate <i>name_of_environment</i></pre>
