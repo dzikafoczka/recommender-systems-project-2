@@ -4,7 +4,10 @@ Department of Mathematics and Computer Science, Adam Mickiewicz University, 2023
 
 Author: Paweł Łączkowski
 
-## Project description
+## Table of contents
+1. [Project description](#project_description)
+
+## Project description <a name="project_description"></a>
 
 The main goal of the project was to create a neural network recommender for hotel data (room recommendations) whose @HR10 metric score would be higher than the amazon recommender.
 
