@@ -6,6 +6,13 @@ Author: Paweł Łączkowski
 
 ## Table of contents
 1. [Project description](#project_description)
+2. [Data preprocessing](#data_preprocessing)
+3. [User features (for hybrid models)](#user_features)
+4. [Item features (for hybrid models)](#item_features)
+5. [Recommender creation](#recommender_creation)
+6. [Non-hybrid models (architectures)](#non_hybrid_models)
+7. [Hybrid models (architectures)](#hybrid_models)
+8. [Recommender tuning](#tuning)
 
 ## Project description <a name="project_description"></a>
 
@@ -19,13 +26,13 @@ To complete this task, the following subtasks had to be accomplished:
 5. Tuning the recommender.
 6. Evaluation of the recommender.
 
-## Preparation of training data (data preprocessing)
+## Preparation of training data (data preprocessing) <a name="data_preprocessing"></a>
 
 The entire process of preparing data can be found in the file `project_1_data_preparation`.
 
 It covers the creation of new features based on available data, such as a `length_of_stay` or `weekend_stay`, and the bucketing of important features.
 
-## Preparation of user features
+## Preparation of user features <a name="user_features"></a>
 
 The task was to extract numerical features for users from the data that could be used to train the recommendation model.
 
@@ -35,7 +42,7 @@ User features are distributions of individual item features for all items with w
 
 In general, the data shows what proportion of all user interactions were, for example, `Christmas term` or `Weekend Stay` interactions.
 
-## Preparation of item features
+## Preparation of item features <a name="item_features"></a>
 
 The task was to extract numerical features for items from the data that could be used to train the recommendation model.
 
@@ -45,7 +52,7 @@ Item features were prepared in a similar way to user features due to the later u
 
 Item features are One-Hot Encoded.
 
-## Creating a recommender.
+## Creating a recommender. <a name="recommender_creation"></a>
 
 The recomenders are included in file - `project_2_recommender_and_evaluation - final`.
 
@@ -65,7 +72,7 @@ My experiments consisted of testing recommenders based on several different arch
 
 Throughout the workflow, I prepared 12 different architectures, 7 based solely on embeddings layers and 5 on embeddings layers with the addition of content-based features that I prepared earlier for Project 1.
 
-## Non-hybrid Models
+## Non-hybrid Models <a name="non_hybrid_models"></a>
 
 ### [1] One fully-connected layer without bias (200+ evals):
 * `(item_embedding): Embedding(763, 6)`
@@ -118,7 +125,7 @@ This architecture performs really solid, but in the end it achieved a final resu
 
 **The best result: 0.240665**
 
-## Hybrid Models
+## Hybrid Models <a name="hybrid_models"></a>
 
 ### [1, 2] One/Three fully connected-layers + content-based features:
 
@@ -207,7 +214,7 @@ This architecture works really well and in the end got the second best score amo
 
 **The best result (with additional manual tuning): 0.262729**
 
-## Tuning the recommender.
+## Tuning the recommender.  <a name="tuning"></a>
 
 Recommender tuning involves properly training the machine learning models used to predict scores.
 
@@ -220,75 +227,79 @@ I also hand-tuned the best models for maximum performance and highest scores.
 ### Tuned parameters
 
 #### n_neg_per_pos
-`n_neg_per_pos` - number of negative interactions per positive one (1-10).
+`n_neg_per_pos` - number of negative interactions per positive one (`1-10`).
 
 #### n_epochs
-`n_epochs` - number of training epochs (1-100).
+`n_epochs` - number of training epochs (`1-100`).
 
-Tuned hyperparameters:
-1. `n_neg_per_pos` - number of negative interactions per positive one (1-10).
+#### batch_size
+`batch_size` - number defining batch size.
 
-#### SVRCBUIRecommender
+I used values that are a power of two: `32`, `64`, `128`, `256`, `512` and `1024`.
 
-Tuned hyperparameters:
-1. `n_neg_per_pos` - number of negative interactions per positive one (1-10).
-2. `C` - regularization parameter.
-3. `kernel` - kernel type.
+#### embedding_dim
+`embedding_dim` - number defining embedding size.
 
-#### RandomForestCBUIRecommender
+At first I used values that are power of two: `8`, `16`, `32` and `64`.
 
-Tuned hyperparameters:
-1. `n_neg_per_pos` - number of negative interactions per positive one (1-10).
-2. `n_estimators` - number of trees in the forest.
-3. `max_depth` - maximum depth of the tree.
-4. `min_samples_split` - minimum number of samples required to split an internal node.
+Later, I also decided to include different values: `3`, `4`, `6`, `10`, `12`, `20`, `24`, `48` and `56`. 
 
-#### XGBoostCBUIRecommender
+#### learning_rate
+`learning_rate` - number defining learning rate (`0.001-0.03`).
 
-Tuned hyperparameters:
-1. `n_neg_per_pos` - number of negative interactions per positive one (1-10).
-2. `n_estimators` - number of boosting stages to perform. 
-3. `max_depth` - maximum depth of the individual regression estimators.
-4. `min_samples_split` - minimum number of samples required to split an internal node.
-5. `learning_rate` - learning rate parameter.
+I tested various ranges and eventually chose the above one, as it gave the most stable results.
 
-#### NeuralNetworkCBUIRecommender
+#### weight_decay
+`weight_decay` - number defining L2 regularization weight (`0.001-0.03`).
 
-Tuned hyperparameters:
-1. `n_neg_per_pos` - number of negative interactions per positive one (1-10).
-2. `epochs` - number of epochs of the training process.
-
-#### CatBoostRegressorCBUIRecommender
-
-Tuned hyperparameters:
-1. `n_neg_per_pos` - number of negative interactions per positive one (1-10).
-2. `iterations` - maximum number of trees.
-3. `l2_leaf_reg` - regularization parameter.
-4. `learning_rate` - learning rate parameter.
-5. `depth` - depth of the tree.
+I tested various ranges and finally chose the same range as for `learning_rate` because it gave the most stable results.
 
 ## Evaluation of the recommender.
 
 The final results are as follows (models whose results were unsatisfactory were omitted):
 
-#### User and Item Features #1
+#### Non-hybrid Models
 
 | **Recommender**                  | **HR@10** |
 |----------------------------------|-----------|
-| LinearRegressionCBUIRecommender  | 0.209776  |
-| RandomForestCBUIRecommender      | 0.187373  |
-| XGBoostCBUIRecommender           | 0.210115  |
-| CatBoostRegressorCBUIRecommender | 0.217583  |
-| AmazonRecommender                | 0.185336  |
+| NNRecommender1                   | 0.248812  |
+| NNRecommender7                   | 0.240665  |
 
-#### User and Item Features #2
+#### Hybrid Models
 
 | **Recommender**                  | **HR@10** |
 |----------------------------------|-----------|
-| LinearRegressionCBUIRecommender  | 0.071623  |
-| XGBoostCBUIRecommender           | 0.102172  |
-| CatBoostRegressorCBUIRecommender | 0.202308  |
-| AmazonRecommender                | 0.185336  |
+| NNRecommender3Hybrid             | 0.255601  |
+| NNRecommender4Hybrid             | 0.265105  |
+| NNRecommender5Hybrid             | 0.262729  |
+
+#### Content-based Models from Project I
+
+| **Recommender**                  | **HR@10** |
+|----------------------------------|-----------|
+| LinearRegressionCBUIRecommender  | 0.243720  |
+| RandomForestCBUIRecommender      | 0.233876  |
+| XGBoostCBUIRecommender           | 0.252206  |
+| CatBoostRegressorCBUIRecommender | 0.244060  |
+
+#### Amazon Recommender
+| **Recommender**                  | **HR@10** |
+|----------------------------------|-----------|
+| AmazonRecommender                | 0.223693  |
+
+#### All results
+| **Recommender**                  | **HR@10** |
+|----------------------------------|-----------|
+| NNRecommender1                   | 0.248812  |
+| NNRecommender7                   | 0.240665  |
+| NNRecommender3Hybrid             | 0.255601  |
+| NNRecommender4Hybrid             | 0.265105  |
+| NNRecommender5Hybrid             | 0.262729  |
+| LinearRegressionCBUIRecommender  | 0.243720  |
+| RandomForestCBUIRecommender      | 0.233876  |
+| XGBoostCBUIRecommender           | 0.252206  |
+| CatBoostRegressorCBUIRecommender | 0.244060  |
+| AmazonRecommender                | 0.223693  |
 
 ## Conclusion
 
