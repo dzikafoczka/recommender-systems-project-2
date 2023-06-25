@@ -14,6 +14,8 @@ Author: Paweł Łączkowski
 7. [Hybrid models (architectures)](#hybrid_models)
 8. [Recommender tuning](#tuning)
 9. [Recommender evaluation](#evaluation)
+10. [Conclusions](#conclusions)
+11. [Requirements](#requirements)
 
 ## Project description <a name="project_description"></a>
 
@@ -302,7 +304,7 @@ The final results are as follows (models whose results were unsatisfactory were 
 | CatBoostRegressorCBUIRecommender | 0.244060  |
 | AmazonRecommender                | 0.223693  |
 
-## Conclusion <a name="evaluation"></a>
+## Conclusion <a name="conclusion"></a>
 
 As I mentioned above all architectures based on GMF+MLP worked really well. They obtained, on average, much better results than the other models. Hybrid models based on GML+MLP were especially good, and they gave me the highest results, above 0.26.
 
@@ -310,7 +312,7 @@ A great failure were models with many fully connected layers and a large number 
 
 In the end, I managed to get a score of `0.265105`, which beat amazon's recomender by `0.041412` points.
 
-## Project requirements
+## Project requirements <a name="requirements"></a>
 
 Project is written in python. 
 
